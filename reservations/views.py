@@ -6,6 +6,11 @@ from django.urls import reverse
 from django.contrib.auth.views import LoginView
 
 
+
+def home(request):
+    return render(request, 'reservations/home.html')
+
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
