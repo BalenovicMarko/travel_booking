@@ -57,3 +57,11 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+        
+        
+class Reservation(models.Model):
+    name = models.CharField(max_length=100)
+    date = models.DateField()
+
+    def __str__(self):
+        return self.name

@@ -4,9 +4,25 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from django.contrib.auth.views import LoginView
+from django.views.generic import ListView, DetailView
+from .models import Reservation
 
+class ReservationListView(ListView):
+    model = Reservation
+    template_name = 'reservations/reservation_list.html'
+    context_object_name = 'reservations'
+    paginate_by = 10
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Reservation.objects.filter(name__icontains=query)
+        return Reservation.objects.all()
 
+class ReservationDetailView(DetailView):
+    model = Reservation
+    template_name = 'reservations/reservation_detail.html'
+    context_object_name = 'reservation'
 def home(request):
     return render(request, 'reservations/home.html')
 

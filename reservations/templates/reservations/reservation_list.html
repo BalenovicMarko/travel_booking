@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Popis rezervacija</title>
+</head>
+<body>
+    <h1>Popis rezervacija</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Pretraži..." value="{{ request.GET.q }}">
+        <button type="submit">Pretraži</button>
+    </form>
+    <ul>
+        {% for reservation in reservations %}
+            <li>
+                <a href="{% url 'reservation-detail' reservation.id %}">{{ reservation.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div>
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Prethodna</a>
+            {% endif %}
+            <span>Stranica {{ page_obj.number }} od {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Sljedeća</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

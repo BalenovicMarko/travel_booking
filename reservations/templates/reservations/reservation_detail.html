@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalji rezervacije</title>
+</head>
+<body>
+    <h1>Detalji rezervacije</h1>
+    <p>ID: {{ reservation.id }}</p>
+    <p>Ime: {{ reservation.name }}</p>
+    <p>Datum: {{ reservation.date }}</p>
+    <a href="{% url 'reservation-list' %}">Natrag na popis</a>
+</body>
+</html>
