@@ -5,9 +5,6 @@ from . import views
 from .views import ReservationListView, ReservationDetailView
 
 urlpatterns = [
-    
-]
-urlpatterns = [
     path('', views.home, name='home'),  
     path('login/', views.CustomLoginView.as_view(template_name='reservations/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
