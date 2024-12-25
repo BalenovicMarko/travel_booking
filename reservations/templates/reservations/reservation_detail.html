@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Detalji rezervacije</title>
-</head>
-<body>
-    <h1>Detalji rezervacije</h1>
-    <p>ID: {{ reservation.id }}</p>
-    <p>Ime: {{ reservation.name }}</p>
-    <p>Datum: {{ reservation.date }}</p>
-    <a href="{% url 'reservation-list' %}">Natrag na popis</a>
-</body>
-</html>
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h2>Detalji rezervacije</h2>
+
+<p><strong>ID:</strong> {{ object.id }}</p>
+<p><strong>Ime:</strong> {{ object.name }}</p>
+<p><strong>Datum:</strong> {{ object.date|date:"d.m.Y" }}</p> 
+<p><strong>Destinacija:</strong> {{ object.destination }}</p>
+<p><strong>Početak putovanja:</strong> {{ object.start_date|date:"d.m.Y" }}</p>
+<p><strong>Kraj putovanja:</strong> {{ object.end_date|date:"d.m.Y" }}</p>
+
+<a href="{% url 'manage-reservations' %}">Natrag na popis</a>
+{% endblock %}

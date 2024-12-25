@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Moja Aplikacija{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">Početna stranica</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'manage-reservations' %}">Upravljanje rezervacijama</a></li>
+                <li><a href="{% url 'logout' %}">Odjava</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Moja aplikacija</p>
+    </footer>
+</body>
+</html>

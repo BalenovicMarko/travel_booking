@@ -1,0 +1,26 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Upravljanje rezervacijama{% endblock %}
+
+{% block content %}
+<h1>Upravljanje rezervacijama</h1>
+
+<h2>Vaše rezervacije</h2>
+<ul>
+    {% for reservation in reservations %}
+        <li>
+            {{ reservation.name }} - 
+            {{ reservation.start_date|date:"d.m.Y" }} do 
+            {{ reservation.end_date|date:"d.m.Y" }}
+            <a href="{% url 'reservation-detail' reservation.id %}">Detalji</a>
+            <a href="{% url 'reservation-update' reservation.id %}">Uredi</a>
+            <a href="{% url 'reservation-delete' reservation.id %}">Obriši</a>
+        </li>
+    {% empty %}
+        <p>Nemate rezervacija.</p>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'reservation-create' %}" class="btn btn-primary">Dodaj novu rezervaciju</a>
+<a href="{% url 'reservation-search' %}" class="btn btn-secondary">Pretraži rezervacije</a>
+{% endblock %}

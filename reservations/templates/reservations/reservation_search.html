@@ -1,0 +1,27 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Pretraživanje Rezervacija{% endblock %}
+
+{% block content %}
+<h1>Pretraži rezervacije</h1>
+
+<form method="get" action="{% url 'reservation-search' %}">
+    <input type="text" name="q" placeholder="Unesite ime ili odredište" value="{{ request.GET.q }}" />
+    <button type="submit" class="btn btn-primary">Pretraži</button>
+</form>
+
+<h2>Rezultati pretraživanja</h2>
+<ul>
+    {% for reservation in reservations %}
+        <li>
+            {{ reservation.name }} - 
+            {{ reservation.start_date|date:"d.m.Y" }} do 
+            {{ reservation.end_date|date:"d.m.Y" }} 
+            u {{ reservation.destination.name }}
+            <a href="{% url 'reservation-detail' reservation.id %}">Detalji</a>
+        </li>
+    {% empty %}
+        <p>Nema rezultata za pretragu "{{ request.GET.q }}".</p>
+    {% endfor %}
+</ul>
+{% endblock %}
