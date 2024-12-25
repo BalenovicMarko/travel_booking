@@ -8,13 +8,10 @@
             {{ reservation.name }} - {{ reservation.date|default:"nema datuma" }}
             <a href="{% url 'reservations:reservation_detail' reservation.pk %}">Detalji</a>
             <a href="{% url 'reservations:reservation_update' reservation.pk %}">Uredi</a>
-            <a href="{% url 'reservations:reservation_delete' reservation.pk %}">Obriši</a>
-            <a href="{% url 'reservations:reservation-search' %}">Pretraži rezervacije</a>
-
-            
+            <a href="{% url 'reservations:reservation_delete' reservation.pk %}">Obriši</a>            
         </li>
     {% endfor %}
 </ul>
 <a href="{% url 'reservations:reservation_add' %}">Dodaj novu rezervaciju</a>
-<a href="{% url 'reservations:reservation-search' %}">Pretraži rezervacije</a>
+
 {% endblock %}

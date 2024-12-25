@@ -31,7 +31,7 @@ def manage_reservations(request):
 
 class ReservationSearchView(LoginRequiredMixin, ListView):
     model = Reservation
-    template_name = 'reservations/reservation_search.html'  # Use a dedicated template for search
+    template_name = 'reservations/reservation_search.html'  
     context_object_name = 'reservations'
 
     def get_queryset(self):
@@ -104,8 +104,8 @@ def register(request):
 class CustomLoginView(LoginView):
     def get_success_url(self):
         if self.request.user.is_superuser:
-            return reverse('admin:index')  # Preusmjeri na Django Admin Panel
-        return reverse('manage-reservations')  # Ostali korisnici idu na upravljanje rezervacijama
+            return reverse('admin:index')  
+        return reverse('manage-reservations')  
 
 
 
