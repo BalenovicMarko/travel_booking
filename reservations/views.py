@@ -9,8 +9,46 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Reservation, Destination, Booking, Service, Customer
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ReservationSerializer
+
+# RESTful API Views
+class ReservationListCreateView(generics.ListCreateAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
+class ReservationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+# REST API: Custom endpoint to search reservations
+class ReservationSearchAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        query = request.query_params.get('q', None)
+        if query:
+            reservations = Reservation.objects.filter(
+                Q(name__icontains=query) | Q(destination__name__icontains=query),
+                user=request.user
+            )
+        else:
+            reservations = Reservation.objects.filter(user=request.user)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
+
+
+# Existing Views
 class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = 'reservations/reservation_list.html'
@@ -31,7 +69,7 @@ def manage_reservations(request):
 
 class ReservationSearchView(LoginRequiredMixin, ListView):
     model = Reservation
-    template_name = 'reservations/reservation_search.html'  
+    template_name = 'reservations/reservation_search.html'
     context_object_name = 'reservations'
 
     def get_queryset(self):
@@ -106,7 +144,6 @@ class CustomLoginView(LoginView):
         if self.request.user.is_superuser:
             return reverse('admin:index')  
         return reverse('manage-reservations')  
-
 
 
 def is_admin(user):
