@@ -1,0 +1,20 @@
+{% extends "reservations/base_generic.html" %} 
+{% block title %}Početna{% endblock %}
+
+{% block content %}
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-indigo-800 mb-2">Dobrodošli u TravelTime agenciju!</h1>
+    <p class="text-gray-600">Rezervirajte svoj smještaj i putovanje jednostavno i brzo.</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <a href="{% url 'book-accommodation' %}" class="block p-6 bg-white rounded-xl border hover:shadow">
+      <h2 class="text-lg font-semibold mb-2">Rezervacija smještaja</h2>
+      <p class="text-sm text-gray-600">Odaberite smještaj i unesite datume (dd.mm.gggg.).</p>
+    </a>
+    <a href="{% url 'book-trip' %}" class="block p-6 bg-white rounded-xl border hover:shadow">
+      <h2 class="text-lg font-semibold mb-2">Rezervacija putovanja</h2>
+      <p class="text-sm text-gray-600">Odaberite ponudu putovanja, način prijevoza i broj osoba.</p>
+    </a>
+  </div>
+{% endblock %}

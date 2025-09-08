@@ -1,0 +1,34 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Uredi rezervaciju smještaja{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Uredi rezervaciju smještaja</h1>
+
+<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4">
+    {% csrf_token %}
+
+    <p><strong>Smještaj:</strong> {{ object.smjestaj.naziv }} ({{ object.smjestaj.destinacija }})</p>
+
+    <label for="{{ form.check_in.id_for_label }}">{{ form.check_in.label }}</label>
+    <input type="text" name="{{ form.check_in.name }}" id="{{ form.check_in.id_for_label }}"
+           class="w-full border rounded-lg p-2"
+           placeholder="dd.mm.gggg"
+           value="{{ form.check_in.value|date:'d.m.Y' }}">
+
+    <label for="{{ form.check_out.id_for_label }}">{{ form.check_out.label }}</label>
+    <input type="text" name="{{ form.check_out.name }}" id="{{ form.check_out.id_for_label }}"
+           class="w-full border rounded-lg p-2"
+           placeholder="dd.mm.gggg"
+           value="{{ form.check_out.value|date:'d.m.Y' }}">
+
+    {{ form.broj_osoba.label_tag }}
+    {{ form.broj_osoba }}
+
+    <div class="font-bold text-lg text-indigo-700">
+        Ukupna cijena: {{ object.ukupna_cijena }} €
+    </div>
+
+    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+        Spremi promjene
+    </button>
+</form>
+{% endblock %}

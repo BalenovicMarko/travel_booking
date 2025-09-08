@@ -1,0 +1,19 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Detalji smještaja{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Detalji rezervacije smještaja</h1>
+
+<div class="bg-white p-4 rounded-xl border space-y-2">
+  <p><strong>Smještaj:</strong> {{ rezervacija.smjestaj.naziv }} ({{ rezervacija.smjestaj.destinacija }})</p>
+  <p><strong>Check-in:</strong> {{ rezervacija.check_in }}</p>
+  <p><strong>Check-out:</strong> {{ rezervacija.check_out }}</p>
+  <p><strong>Broj osoba:</strong> {{ rezervacija.broj_osoba }}</p>
+  <p><strong>Ukupna cijena:</strong> {{ rezervacija.ukupna_cijena }} EUR</p>
+</div>
+
+<div class="mt-4 flex space-x-2">
+  <a href="{% url 'moje-rezervacije' %}" class="text-sm px-3 py-1 rounded border hover:bg-gray-100">⟵ Povratak</a>
+  <a href="{% url 'update-accommodation-booking' rezervacija.pk %}" 
+     class="text-sm px-3 py-1 rounded border bg-yellow-100 hover:bg-yellow-200">✎ Uredi</a>
+</div>
+{% endblock %}

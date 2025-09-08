@@ -1,0 +1,21 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Prijava{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl border">
+  <h1 class="text-xl font-semibold mb-4">Prijava</h1>
+  
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="w-full py-2 rounded bg-indigo-600 text-white">Prijava</button>
+  </form>
+
+
+  <p class="mt-4 text-center text-sm text-gray-600">
+    Nemaš račun? 
+    <a href="{% url 'register' %}" class="text-indigo-600 hover:underline font-medium">
+      Registriraj se ovdje
+    </a>
+  </p>
+</div>
+{% endblock %}

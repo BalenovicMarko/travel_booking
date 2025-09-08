@@ -1,0 +1,28 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Uredi rezervaciju putovanja{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Uredi rezervaciju putovanja</h1>
+
+<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="putovanje-form">
+    {% csrf_token %}
+
+    <p><strong>Destinacija:</strong> {{ object.ponuda.destinacija }}</p>
+    <p><strong>Datum polaska:</strong> {{ object.ponuda.datum_polaska }}</p>
+
+    {{ form.broj_osoba.label_tag }}
+    {{ form.broj_osoba }}
+
+    <div class="mt-2">
+        <p><strong>Način prijevoza:</strong></p>
+        {{ form.prijevoz }}
+    </div>
+
+    <div id="ukupna-cijena" class="font-bold text-lg text-indigo-700">
+        Ukupna cijena: {{ object.ukupna_cijena }} €
+    </div>
+
+    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+        Spremi promjene
+    </button>
+</form>
+{% endblock %}

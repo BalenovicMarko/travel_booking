@@ -1,0 +1,110 @@
+{% extends "reservations/base_generic.html" %}
+
+{% block title %}Rezervacija putovanja{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">Rezervacija putovanja</h1>
+
+  <form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="putovanje-form">
+    {% csrf_token %}
+
+    <label for="id_ponuda">Odaberi ponudu (grad + datum)</label>
+    <select name="ponuda" id="id_ponuda" class="w-full border rounded-lg p-2">
+    </select>
+
+    <div id="vozila-container" class="space-y-2 mt-2"></div>
+
+    <label for="id_broj_osoba">Broj osoba</label>
+    {{ form.broj_osoba }}
+
+    <p class="text-sm text-gray-500">
+      Cijena uključuje osnovno putovanje i dodatnu cijenu vozila po osobi.
+    </p>
+
+    <div id="ukupna-cijena" class="font-bold text-lg text-indigo-700">Ukupna cijena: 0,00 €</div>
+
+    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+      Rezerviraj
+    </button>
+  </form>
+</div>
+
+<script>
+const ponude = JSON.parse('{{ ponude_json|escapejs }}');
+
+function formatCijena(value) {
+    return value.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function popuniPonude() {
+    const selectPonuda = document.getElementById("id_ponuda");
+    selectPonuda.innerHTML = '';
+    ponude.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.dataset.osnovno = p.cijena_osnovno;
+        option.dataset.vozila = JSON.stringify(p.vozila);
+        option.text = `${p.destinacija} (${p.datum_polaska}) - ${formatCijena(p.cijena_osnovno)} € /osoba`;
+        selectPonuda.appendChild(option);
+    });
+}
+
+function popuniVozila() {
+    const selectPonuda = document.getElementById("id_ponuda");
+    const container = document.getElementById("vozila-container");
+    container.innerHTML = '';
+    if (!selectPonuda.selectedOptions.length) return;
+
+    const option = selectPonuda.selectedOptions[0];
+    const vozila = JSON.parse(option.dataset.vozila);
+
+    vozila.forEach((v, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center space-x-2';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'prijevoz';
+        input.value = v.id;
+        input.id = 'vozilo-' + v.id;
+        input.dataset.cijena = v.cijena;
+        input.checked = index === 0;
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.innerText = `${v.tip} (+${formatCijena(v.cijena)} € /osoba)`;
+
+        div.appendChild(input);
+        div.appendChild(label);
+        container.appendChild(div);
+    });
+
+    izracunajPutovanje();
+}
+
+function izracunajPutovanje() {
+    const selectPonuda = document.getElementById("id_ponuda");
+    const brojOsoba = parseInt(document.getElementById("id_broj_osoba").value) || 1;
+    if (!selectPonuda.selectedOptions.length) return;
+
+    const osnovnaCijena = parseFloat(selectPonuda.selectedOptions[0].dataset.osnovno) || 0;
+    const voziloRadio = document.querySelector('#vozila-container input[name="prijevoz"]:checked');
+    const cijenaVozila = voziloRadio ? parseFloat(voziloRadio.dataset.cijena) : 0;
+    const ukupno = brojOsoba * (osnovnaCijena + cijenaVozila);
+
+    document.getElementById("ukupna-cijena").innerText =
+        "Ukupna cijena: " + formatCijena(ukupno) + " €";
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+    popuniPonude();
+    popuniVozila();
+    izracunajPutovanje();
+
+    document.getElementById("id_ponuda").addEventListener("change", popuniVozila);
+    document.getElementById("putovanje-form").addEventListener("input", izracunajPutovanje);
+});
+</script>
+
+{% endblock %}

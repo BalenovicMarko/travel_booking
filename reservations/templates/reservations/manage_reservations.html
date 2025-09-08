@@ -1,0 +1,21 @@
+{% extends 'base_generic.html' %}
+{% block title %}Upravljanje rezervacijama{% endblock %}
+{% block content %}
+<div class="grid md:grid-cols-2 gap-6">
+  <div class="card">
+    <h3 class="text-lg font-semibold mb-3">Radnje</h3>
+    <div class="flex flex-wrap gap-2">
+      <a class="btn btn-primary" href="{% url 'reservation-create' %}">Nova rezervacija</a>
+      <a class="btn btn-secondary" href="{% url 'trip-create' %}">Novo putovanje</a>
+      <a class="btn btn-secondary" href="{% url 'accommodation-create' %}">Novi smještaj</a>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="text-lg font-semibold mb-3">Brza pretraga</h3>
+    <form method="get" action="{% url 'reservation-search' %}" class="flex gap-2">
+      <input type="text" name="q" placeholder="Pretraži po nazivu, destinaciji..." class="form-input">
+      <button class="btn btn-secondary" type="submit">Traži</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

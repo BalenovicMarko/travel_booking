@@ -1,0 +1,119 @@
+{% extends "reservations/base_generic.html" %}
+
+{% block title %}Rezervacija smještaja{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">Rezervacija smještaja</h1>
+
+  <form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="smjestaj-form">
+    {% csrf_token %}
+
+  
+    <label for="id_grad">Odaberi grad / destinaciju</label>
+    {{ form.grad }}
+
+
+    <label for="id_smjestaj">Odaberi smještaj</label>
+    {{ form.smjestaj }}
+
+    <label for="id_check_in">Datum prijave</label>
+    {{ form.check_in }}
+
+    <label for="id_check_out">Datum odjave</label>
+    {{ form.check_out }}
+
+    <label for="id_broj_osoba">Broj osoba</label>
+    {{ form.broj_osoba }}
+
+    <p class="text-sm text-gray-500">
+      Datume upisati kao <strong>dd.mm.gggg</strong> – npr. 05.09.2025
+    </p>
+
+    
+    <div id="ukupna-cijena" class="font-bold text-lg text-indigo-700">Ukupna cijena: 0,00 €</div>
+
+    <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+      Rezerviraj
+    </button>
+  </form>
+</div>
+
+{# Siguran JSON za JS #}
+{{ smjestaji|json_script:"smjestaji-data" }}
+
+<script>
+const smjestaji = JSON.parse(document.getElementById("smjestaji-data").textContent);
+
+function popuniSmjestajePoGradu() {
+    const gradSelect = document.getElementById("id_grad");
+    const smjestajSelect = document.getElementById("id_smjestaj");
+
+    if (!gradSelect || !smjestajSelect) return;
+
+    const odabraniGrad = gradSelect.value;
+
+    
+    smjestajSelect.innerHTML = "";
+
+   
+    const filtrirani = smjestaji.filter(s => String(s.destinacija_id) === odabraniGrad);
+
+    if (filtrirani.length === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Nema smještaja za odabrani grad";
+        smjestajSelect.appendChild(opt);
+    } else {
+        filtrirani.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.id;
+            opt.setAttribute("data-cijena", s.cijena_po_nocenju);
+            opt.textContent = `${s.naziv} — ${s.tip} | ${s.cijena_po_nocenju.toLocaleString("hr-HR", { minimumFractionDigits: 2 })} €/noć | ${"⭐".repeat(s.zvjezdice)}`;
+            smjestajSelect.appendChild(opt);
+        });
+    }
+
+    izracunajSmjestaj();
+}
+
+function izracunajSmjestaj() {
+    const select = document.getElementById("id_smjestaj");
+    const checkIn = document.getElementById("id_check_in").value;
+    const checkOut = document.getElementById("id_check_out").value;
+    const brojOsoba = parseInt(document.getElementById("id_broj_osoba").value) || 1;
+
+    if (!select || !select.selectedOptions.length) {
+        document.getElementById("ukupna-cijena").innerText = "Ukupna cijena: 0,00 €";
+        return;
+    }
+
+    const option = select.selectedOptions[0];
+    const cijenaPoNocenju = parseFloat(option.getAttribute("data-cijena")) || 0;
+
+    let brojNocenja = 1;
+    if (checkIn && checkOut) {
+        const partsIn = checkIn.split(".");
+        const partsOut = checkOut.split(".");
+        if (partsIn.length === 3 && partsOut.length === 3) {
+            const d1 = new Date(partsIn[2], partsIn[1]-1, partsIn[0]);
+            const d2 = new Date(partsOut[2], partsOut[1]-1, partsOut[0]);
+            const diff = (d2 - d1) / (1000*60*60*24);
+            if (diff > 0) brojNocenja = diff;
+        }
+    }
+
+    const ukupno = brojNocenja * brojOsoba * cijenaPoNocenju;
+    document.getElementById("ukupna-cijena").innerText =
+        "Ukupna cijena: " + ukupno.toLocaleString("hr-HR", { minimumFractionDigits: 2 }) + " €";
+}
+
+
+document.getElementById("smjestaj-form").addEventListener("input", izracunajSmjestaj);
+document.getElementById("id_grad").addEventListener("change", popuniSmjestajePoGradu);
+document.addEventListener("DOMContentLoaded", () => {
+    popuniSmjestajePoGradu();
+    izracunajSmjestaj();
+});
+</script>
+{% endblock %}

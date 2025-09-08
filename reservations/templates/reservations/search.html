@@ -1,0 +1,55 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Pretraga{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Pretraga</h1>
+<form method="get" class="mb-4 flex gap-2">
+  <input name="q" value="{{ query }}" placeholder="Upišite naziv smještaja ili grad" class="flex-1 border rounded-lg p-2">
+  <button class="px-4 py-2 rounded bg-indigo-600 text-white">Pretraži</button>
+</form>
+
+{% if query %}
+  <p class="text-sm text-gray-600 mb-2">Rezultati za: <strong>{{ query }}</strong></p>
+{% endif %}
+
+<div class="grid md:grid-cols-2 gap-6">
+  <div>
+    <h2 class="font-medium mb-2">Smještaj</h2>
+    <div class="bg-white border rounded-xl divide-y">
+      {% for r in smjestaji %}
+        <div class="p-4 flex items-center justify-between">
+          <div>
+            <div class="font-medium">{{ r.smjestaj.naziv }} – {{ r.smjestaj.destinacija }}</div>
+            <div class="text-sm text-gray-600">
+              {{ r.check_in }} → {{ r.check_out }} • {{ r.broj_osoba }} osoba • {{ r.ukupna_cijena }} EUR
+            </div>
+          </div>
+          <a href="{% url 'detail-accommodation-booking' r.pk %}" 
+             class="text-sm px-3 py-1 rounded border text-blue-600">Detalji</a>
+        </div>
+      {% empty %}
+        <div class="p-4 text-sm text-gray-600">Nema rezultata.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <h2 class="font-medium mb-2">Putovanja</h2>
+    <div class="bg-white border rounded-xl divide-y">
+      {% for r in putovanja %}
+        <div class="p-4 flex items-center justify-between">
+          <div>
+            <div class="font-medium">{{ r.ponuda.destinacija }} – {{ r.ponuda.datum_polaska }}</div>
+            <div class="text-sm text-gray-600">
+              {{ r.get_prijevoz_display }} • {{ r.broj_osoba }} osoba • {{ r.ukupna_cijena }} EUR
+            </div>
+          </div>
+          <a href="{% url 'detail-trip-booking' r.pk %}" 
+             class="text-sm px-3 py-1 rounded border text-blue-600">Detalji</a>
+        </div>
+      {% empty %}
+        <div class="p-4 text-sm text-gray-600">Nema rezultata.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

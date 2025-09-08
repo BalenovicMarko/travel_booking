@@ -1,0 +1,48 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Registracija{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl border shadow">
+  <h1 class="text-xl font-semibold mb-6">Registracija</h1>
+  
+  <form method="post" class="space-y-5">
+    {% csrf_token %}
+    
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+          {{ field.label }}
+        </label>
+        {{ field }}
+        
+        {% if field.help_text %}
+          <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+        {% endif %}
+        
+        {% for error in field.errors %}
+          <p class="text-sm text-red-600 mt-1">❌ {{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    
+    {% if form.non_field_errors %}
+      <div class="bg-red-50 border border-red-200 text-red-700 p-2 rounded text-sm">
+        {% for error in form.non_field_errors %}
+          <p>❌ {{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    
+    <button type="submit" 
+            class="w-full py-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition">
+      Kreiraj račun
+    </button>
+  </form>
+
+  <p class="mt-6 text-center text-sm text-gray-600">
+    Već imaš račun?
+    <a href="{% url 'login' %}" class="text-indigo-600 hover:underline font-medium">
+      Prijavi se ovdje
+    </a>
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Moje rezervacije{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Moje rezervacije</h1>
+
+<h2 class="font-medium mb-2">Smještaj</h2>
+<div class="bg-white border rounded-xl divide-y mb-6">
+  {% for r in smjestaji %}
+    <div class="p-4 flex items-center justify-between">
+      <div>
+        <div class="font-medium">{{ r.smjestaj.naziv }} – {{ r.smjestaj.destinacija }}</div>
+        <div class="text-sm text-gray-600">
+          {{ r.check_in|date:"d.m.Y" }} → {{ r.check_out|date:"d.m.Y" }} • {{ r.broj_osoba }} osoba
+        </div>
+        <div class="font-bold text-indigo-700">
+          Ukupno: {{ r.ukupna_cijena|floatformat:2 }} EUR
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a href="{% url 'detail-accommodation-booking' r.pk %}" 
+           class="text-sm px-3 py-1 rounded border text-blue-600">Detalji</a>
+        <a href="{% url 'delete-accommodation-booking' r.pk %}" 
+           class="text-sm px-3 py-1 rounded border text-red-600">Otkaži</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="p-4 text-sm text-gray-600">Nema rezervacija smještaja.</div>
+  {% endfor %}
+</div>
+
+
+<h2 class="font-medium mb-2">Putovanja</h2>
+<div class="bg-white border rounded-xl divide-y">
+  {% for r in putovanja %}
+    <div class="p-4 flex items-center justify-between">
+      <div>
+        <div class="font-medium">{{ r.ponuda.destinacija }} – {{ r.ponuda.datum_polaska|date:"d.m.Y" }}</div>
+        <div class="text-sm text-gray-600">{{ r.prijevoz.transport_type.naziv }} • {{ r.broj_osoba }} osoba</div>
+        <div class="font-bold text-indigo-700">
+          Ukupno: {{ r.ukupna_cijena|floatformat:2 }} EUR
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a href="{% url 'detail-trip-booking' r.pk %}" 
+           class="text-sm px-3 py-1 rounded border text-blue-600">Detalji</a>
+        <a href="{% url 'delete-trip-booking' r.pk %}" 
+           class="text-sm px-3 py-1 rounded border text-red-600">Otkaži</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="p-4 text-sm text-gray-600">Nema rezervacija putovanja.</div>
+  {% endfor %}
+</div>
+{% endblock %}

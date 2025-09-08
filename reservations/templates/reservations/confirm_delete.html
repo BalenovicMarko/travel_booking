@@ -1,0 +1,13 @@
+{% extends "reservations/base_generic.html" %}
+{% block title %}Potvrda brisanja{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl border">
+  <h1 class="text-xl font-semibold mb-4">{{ naslov|default:"Brisanje" }}</h1>
+  <p class="mb-4">Jeste li sigurni da želite obrisati ovu stavku?</p>
+  <form method="post" class="flex gap-2">
+    {% csrf_token %}
+    <button class="px-4 py-2 rounded bg-red-600 text-white">Obriši</button>
+    <a href="{{ back_url }}" class="px-4 py-2 rounded border">Odustani</a>
+  </form>
+</div>
+{% endblock %}
