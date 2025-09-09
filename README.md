@@ -69,26 +69,23 @@ Tema je aplikacija za **rezervaciju putovanja i smještaja**.
 
 ```bash
 # 1. Kloniraj repozitorij
-git clone https://github.com/ime-korisnika/travel-booking.git
-cd travel-booking
+# 1. Kloniraj repozitorij
+git clone https://github.com/BalenovicMarko/travel_booking.git
+cd travel_booking
 
-# 2. Kreiraj virtualno okruženje
-python -m venv venv
-source venv/bin/activate   # Linux / macOS
-venv\Scripts\activate      # Windows
-
-# 3. Instaliraj potrebne pakete
+# 2. Instaliraj potrebne pakete globalno (ili u svom sistemskom Pythonu)
 pip install -r requirements.txt
 
-# 4. Pokreni migracije
+# 3. Pokreni migracije
 python manage.py migrate
 
-# 5. Kreiraj superusera (admin korisnika)
+# 4. Kreiraj superusera (admin korisnika)
 python manage.py createsuperuser
 
-# 6. Pokreni server
+# 5. Pokreni server
 python manage.py runserver
 
-# 7. Pristupi aplikaciji
+# 6. Pristupi aplikaciji
 # Aplikacija: http://127.0.0.1:8000
 # Admin panel: http://127.0.0.1:8000/admin
+
