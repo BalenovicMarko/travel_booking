@@ -69,7 +69,6 @@ Tema je aplikacija za **rezervaciju putovanja i smještaja**.
 
 ```bash
 # 1. Kloniraj repozitorij
-# 1. Kloniraj repozitorij
 git clone https://github.com/BalenovicMarko/travel_booking.git
 cd travel_booking
 
