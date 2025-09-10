@@ -3,7 +3,7 @@
 ## 📌 Zadatak
 Zadatak je napraviti aplikaciju pomoću Djanga.  
 Tema je aplikacija za **rezervaciju putovanja i smještaja**.
-
+Autor ovoga projekta: Marko Balenović
 ---
 
 ## 🚀 Funkcionalnosti aplikacije
@@ -77,6 +77,7 @@ pip install -r requirements.txt
 
 # 3. Pokreni migracije
 python manage.py migrate
+python manage.py loaddata initial_data.json
 
 # 4. Kreiraj superusera (admin korisnika)
 python manage.py createsuperuser
