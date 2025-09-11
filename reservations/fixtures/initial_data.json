@@ -83,7 +83,7 @@
   "model": "reservations.destination",
   "pk": 11,
   "fields": {
-    "naziv": "Vara×din",
+    "naziv": "Varaždin",
     "drzava": "Hrvatska"
   }
 },
@@ -183,7 +183,7 @@
   "model": "reservations.accommodation",
   "pk": 8,
   "fields": {
-    "naziv": "Apartman Mre×nica",
+    "naziv": "Apartman Mrežnica",
     "destinacija": 10,
     "tip": "APARTMAN",
     "kapacitet_jedinica": 5,
