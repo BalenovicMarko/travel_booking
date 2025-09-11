@@ -2,7 +2,6 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (
     home, register, CustomLoginView,
-    user_dashboard, admin_dashboard,
     MojeRezervacijeView, SearchView,
     AccommodationBookingCreateView, TripBookingCreateView,
     AccommodationBookingUpdateView, TripBookingUpdateView,
@@ -16,10 +15,6 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(template_name='reservations/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('register/', register, name='register'),
-
-    
-    path('dashboard/', user_dashboard, name='user-dashboard'),
-    path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
 
     
     path('rezervacije/moje/', MojeRezervacijeView.as_view(), name='moje-rezervacije'),
