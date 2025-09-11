@@ -77,15 +77,17 @@ pip install -r requirements.txt
 
 # 3. Pokreni migracije
 python manage.py migrate
-python manage.py loaddata initial_data.json
 
-# 4. Kreiraj superusera (admin korisnika)
+# 4. Kreiraj superusera (admin korisnika) 
 python manage.py createsuperuser
 
-# 5. Pokreni server
+# 5. Učitaj inicijalne podatke
+python manage.py loaddata initial_data.json #(Obavezno napraviti korisnika prije ove naredbe jer inače neće raditi)
+
+# 6. Pokreni server
 python manage.py runserver
 
-# 6. Pristupi aplikaciji
+# 7. Pristupi aplikaciji
 # Aplikacija: http://127.0.0.1:8000
 # Admin panel: http://127.0.0.1:8000/admin
 
