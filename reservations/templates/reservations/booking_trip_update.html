@@ -3,11 +3,13 @@
 {% block content %}
 <h1 class="text-xl font-semibold mb-4">Uredi rezervaciju putovanja</h1>
 
-<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="putovanje-form">
+<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="update-putovanje-form">
     {% csrf_token %}
 
     <p><strong>Destinacija:</strong> {{ object.ponuda.destinacija }}</p>
     <p><strong>Datum polaska:</strong> {{ object.ponuda.datum_polaska }}</p>
+
+    <span id="ponuda-cijena" data-cijena="{{ object.ponuda.cijena_osnovno }}"></span>
 
     {{ form.broj_osoba.label_tag }}
     {{ form.broj_osoba }}
@@ -25,4 +27,34 @@
         Spremi promjene
     </button>
 </form>
+
+<script>
+function formatCijena(value) {
+    return value.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function izracunajPutovanjeUpdate() {
+    const ponudaCijena = parseFloat(document.getElementById("ponuda-cijena").dataset.cijena) || 0;
+    const brojOsoba = parseInt(document.getElementById("id_broj_osoba").value) || 1;
+
+
+    const prijevoz = document.querySelector('#update-putovanje-form input[name="prijevoz"]:checked');
+
+
+    let cijenaPrijevoza = 0;
+    if (prijevoz) {
+        const label = document.querySelector("label[for='" + prijevoz.id + "']");
+        if (label && label.textContent.match(/\+([\d,.]+)/)) {
+            cijenaPrijevoza = parseFloat(label.textContent.match(/\+([\d,.]+)/)[1].replace(",", "."));
+        }
+    }
+
+    const ukupno = brojOsoba * (ponudaCijena + cijenaPrijevoza);
+    document.getElementById("ukupna-cijena").innerText =
+        "Ukupna cijena: " + formatCijena(ukupno) + " €";
+}
+
+document.getElementById("update-putovanje-form").addEventListener("input", izracunajPutovanjeUpdate);
+document.addEventListener("DOMContentLoaded", izracunajPutovanjeUpdate);
+</script>
 {% endblock %}

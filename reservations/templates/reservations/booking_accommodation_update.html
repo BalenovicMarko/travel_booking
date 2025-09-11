@@ -3,10 +3,14 @@
 {% block content %}
 <h1 class="text-xl font-semibold mb-4">Uredi rezervaciju smještaja</h1>
 
-<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4">
+<form method="post" class="bg-white shadow-md rounded-xl p-6 space-y-4" id="update-smjestaj-form">
     {% csrf_token %}
 
-    <p><strong>Smještaj:</strong> {{ object.smjestaj.naziv }} ({{ object.smjestaj.destinacija }})</p>
+    <p>
+        <strong>Smještaj:</strong> 
+        {{ object.smjestaj.naziv }} ({{ object.smjestaj.destinacija }})
+        <span id="smjestaj-cijena" data-cijena="{{ object.smjestaj.cijena_po_nocenju }}"></span>
+    </p>
 
     <label for="{{ form.check_in.id_for_label }}">{{ form.check_in.label }}</label>
     <input type="text" name="{{ form.check_in.name }}" id="{{ form.check_in.id_for_label }}"
@@ -23,7 +27,7 @@
     {{ form.broj_osoba.label_tag }}
     {{ form.broj_osoba }}
 
-    <div class="font-bold text-lg text-indigo-700">
+    <div id="ukupna-cijena" class="font-bold text-lg text-indigo-700">
         Ukupna cijena: {{ object.ukupna_cijena }} €
     </div>
 
@@ -31,4 +35,34 @@
         Spremi promjene
     </button>
 </form>
+
+<script>
+function izracunajSmjestajUpdate() {
+    const cijenaEl = document.getElementById("smjestaj-cijena");
+    const cijenaPoNocenju = parseFloat(cijenaEl.getAttribute("data-cijena")) || 0;
+
+    const checkIn = document.getElementById("{{ form.check_in.id_for_label }}").value;
+    const checkOut = document.getElementById("{{ form.check_out.id_for_label }}").value;
+    const brojOsoba = parseInt(document.getElementById("id_broj_osoba").value) || 1;
+
+    let brojNocenja = 1;
+    if (checkIn && checkOut) {
+        const partsIn = checkIn.split(".");
+        const partsOut = checkOut.split(".");
+        if (partsIn.length === 3 && partsOut.length === 3) {
+            const d1 = new Date(partsIn[2], partsIn[1]-1, partsIn[0]);
+            const d2 = new Date(partsOut[2], partsOut[1]-1, partsOut[0]);
+            const diff = (d2 - d1) / (1000*60*60*24);
+            if (diff > 0) brojNocenja = diff;
+        }
+    }
+
+    const ukupno = brojNocenja * brojOsoba * cijenaPoNocenju;
+    document.getElementById("ukupna-cijena").innerText =
+        "Ukupna cijena: " + ukupno.toLocaleString("hr-HR", { minimumFractionDigits: 2 }) + " €";
+}
+
+document.getElementById("update-smjestaj-form").addEventListener("input", izracunajSmjestajUpdate);
+document.addEventListener("DOMContentLoaded", izracunajSmjestajUpdate);
+</script>
 {% endblock %}
