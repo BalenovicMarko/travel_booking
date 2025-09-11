@@ -70,7 +70,7 @@ Autor ovoga projekta: Marko Balenović
 ```bash
 # 1. Kloniraj repozitorij
 git clone https://github.com/BalenovicMarko/travel_booking.git
-cd travel_booking
+cd travel_booking #(Ako automatski nije otvoren u tom direktoriju)
 
 # 2. Instaliraj potrebne pakete globalno (ili u svom sistemskom Pythonu)
 pip install -r requirements.txt
